@@ -1,0 +1,27 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+import os
+for dirname, _, filenames in os.walk('/kaggle/input'):
+    for filename in filenames:
+        print(os.path.join('kaggle kernels output umasharma11/influencers-analysis-for-business-purpose -p /path/to/dest', 'social media influencers - instagram.csv'))
+        df_t=pd.read_csv('social media influencers - tiktok.csv')
+df_i=pd.read_csv('social media influencers - instagram.csv')
+#print(df_i)
+import re
+def convert(x):
+    return re.findall('\d+\.?\d*',x)
+def change(df,list1):
+    for i in list1:
+        df['new'+i]=df[i].apply(convert)
+        df['new'+i]=df['new'+i].apply(lambda x: "".join(x))
+        df['new'+i]=pd.to_numeric(df['new'+i])
+        df['new'+i]=np.where(['M' in j for j in df[i]],df['new'+i]*1000000,
+        np.where(['K' in j1 for j1 in df[i]],df['new'+i]*1000,df['new'+i]))
+    return df
+    change(df_i,['Subscribers count'])
+    df_i.sort_values(by='newSubscribers count',ascending=False,ignore_index=True).iloc[0:10,[1,2]]
+print(df_i)
+df_i.rename({'category_1':'Category','Audience country(mostly)':'Audience Country'},axis=1,inplace=True)
+print(df_i)
